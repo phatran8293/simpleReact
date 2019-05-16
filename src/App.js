@@ -1,33 +1,17 @@
 import React, { Component } from "react";
-import Counter from "./counter";
-class Counters extends Component {
+import Navbar from "./components/navbar";
+import Counters from "./components/counters";
+
+class App extends Component {
   state = {
     counters: [
-      { id: 1, value: 1 },
-      { id: 2, value: 2 },
-      { id: 3, value: 3 },
-      { id: 4, value: 4 },
-      { id: 5, value: 5 }
+      { id: 1, value: 0 },
+      { id: 2, value: 0 },
+      { id: 3, value: 0 },
+      { id: 4, value: 0 },
+      { id: 5, value: 0 }
     ]
   };
-  render() {
-    return (
-      <div>
-        <button onClick={this.handleReset} className="btn btn-secondary btn-sm">
-          Reset
-        </button>
-        {this.state.counters.map(counter => (
-          <Counter
-            onDelete={this.handleDelete}
-            onAdd={this.handleAdd}
-            onMinus={this.handleMinus}
-            key={counter.id}
-            counter={counter}
-          />
-        ))}
-      </div>
-    );
-  }
 
   handleDelete = counterId => {
     const remainCounters = this.state.counters.filter(c => c.id !== counterId);
@@ -57,6 +41,25 @@ class Counters extends Component {
     counterMinus[index].value--;
     this.setState({ counters: counterMinus });
   };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Navbar
+          totalCounters={this.state.counters.filter(c => c.value > 0).length}
+        />
+        <main className="container">
+          <Counters
+            counters={this.state.counters}
+            onDelete={this.handleDelete}
+            onAdd={this.handleAdd}
+            onMinus={this.handleMinus}
+            onReset={this.handleReset}
+          />
+        </main>
+      </React.Fragment>
+    );
+  }
 }
 
-export default Counters;
+export default App;
